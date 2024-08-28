@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController //sirve para crear servicios RESTful -> lo que significa que está diseñada para manejar solicitudes HTTP y devolver respuestas en formato JSON o XML
 @RequestMapping("/api/v1")//Indica que cualquier solicitud HTTP que coincida con la ruta especificada debe ser manejada por los métodos de esa clase que tengan rutas adicionales definidas.
 //todas las rutas dentro de ese controlador estarán precedidas por /api/v1
@@ -17,6 +19,21 @@ public class ClienteController {
 
     @Autowired
     private IClienteService clienteService;
+
+    @GetMapping("clientes")
+    public ResponseEntity<?> showAll() {
+        List<Cliente> getList = clienteService.findAll();
+        if(getList == null) {
+            return new ResponseEntity<>(MensajeResponse.builder()
+                    .mensaje("No hay registros")
+                    .object(null)
+                    .build(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(MensajeResponse.builder()
+                .mensaje("Consulta Exitosa")
+                .object(getList)
+                .build(), HttpStatus.OK);
+    }
 
     @PostMapping("cliente")
     public ResponseEntity<?> create(@RequestBody ClienteDto clienteDto) {

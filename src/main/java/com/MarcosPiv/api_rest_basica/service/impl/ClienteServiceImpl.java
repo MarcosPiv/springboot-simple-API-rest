@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 //implemetamos la interfaz
 @Service //la marcamos como servicio. La clase ClienteImpl es un servicio que contiene lógica de negocio y será administrado por Spring.
 public class ClienteServiceImpl implements IClienteService {
@@ -48,5 +50,10 @@ public class ClienteServiceImpl implements IClienteService {
     @Override
     public boolean existsById(Integer id) {
         return clienteDao.existsById(id);
+    }
+
+    @Override
+    public List<Cliente> findAll() {
+        return (List) clienteDao.findAll();
     }
 }

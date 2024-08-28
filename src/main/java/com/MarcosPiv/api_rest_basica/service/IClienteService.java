@@ -3,6 +3,8 @@ package com.MarcosPiv.api_rest_basica.service;
 import com.MarcosPiv.api_rest_basica.model.dto.ClienteDto;
 import com.MarcosPiv.api_rest_basica.model.entity.Cliente;
 
+import java.util.List;
+
 public interface IClienteService {
     //SAVE: sirve tanto para crear una nueva entidad como para actualizar una existente.
     //Crear una Nueva Entidad: Si la entidad no tiene un ID (o el ID es null), el metodo save insertará un nuevo registro en la base de datos.
@@ -14,4 +16,6 @@ public interface IClienteService {
     void delete(Cliente cliente);//elimina la entidad pasada como argumento
 
     boolean existsById(Integer id);
+
+    List<Cliente> findAll();
 }
