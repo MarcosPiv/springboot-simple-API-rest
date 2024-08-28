@@ -3,14 +3,14 @@ package com.MarcosPiv.api_rest_basica.service.impl;
 import com.MarcosPiv.api_rest_basica.model.dao.ClienteDao;
 import com.MarcosPiv.api_rest_basica.model.dto.ClienteDto;
 import com.MarcosPiv.api_rest_basica.model.entity.Cliente;
-import com.MarcosPiv.api_rest_basica.service.ICliente;
+import com.MarcosPiv.api_rest_basica.service.IClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 //implemetamos la interfaz
 @Service //la marcamos como servicio. La clase ClienteImpl es un servicio que contiene lógica de negocio y será administrado por Spring.
-public class ClienteImpl implements ICliente {
+public class ClienteServiceImpl implements IClienteService {
 
     @Autowired //inyecciones de dependencia: Se utiliza para inyectar automáticamente una instancia de una dependencia en el contenedor de Spring.
     private ClienteDao clienteDao;
@@ -43,5 +43,10 @@ public class ClienteImpl implements ICliente {
     @Override
     public void delete(Cliente cliente) {
         clienteDao.delete(cliente);
+    }
+
+    @Override
+    public boolean existsById(Integer id) {
+        return clienteDao.existsById(id);
     }
 }

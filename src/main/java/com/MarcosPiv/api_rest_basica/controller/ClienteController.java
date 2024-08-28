@@ -3,15 +3,12 @@ package com.MarcosPiv.api_rest_basica.controller;
 import com.MarcosPiv.api_rest_basica.model.dto.ClienteDto;
 import com.MarcosPiv.api_rest_basica.model.entity.Cliente;
 import com.MarcosPiv.api_rest_basica.model.payload.MensajeResponse;
-import com.MarcosPiv.api_rest_basica.service.ICliente;
+import com.MarcosPiv.api_rest_basica.service.IClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController //sirve para crear servicios RESTful -> lo que significa que está diseñada para manejar solicitudes HTTP y devolver respuestas en formato JSON o XML
 @RequestMapping("/api/v1")//Indica que cualquier solicitud HTTP que coincida con la ruta especificada debe ser manejada por los métodos de esa clase que tengan rutas adicionales definidas.
@@ -19,7 +16,7 @@ import java.util.Map;
 public class ClienteController {
 
     @Autowired
-    private ICliente clienteService;
+    private IClienteService clienteService;
 
     @PostMapping("cliente")
     public ResponseEntity<?> create(@RequestBody ClienteDto clienteDto) {
@@ -49,22 +46,30 @@ public class ClienteController {
     }
 
 
-    @PutMapping("cliente")
-    public ResponseEntity<?> update(@RequestBody ClienteDto clienteDto) {
+    @PutMapping("cliente/{id}")
+    public ResponseEntity<?> update(@RequestBody ClienteDto clienteDto, @PathVariable Integer id) {
         Cliente clienteUpdate = null;
         try {
-            clienteUpdate = clienteService.save(clienteDto);
-            clienteDto = ClienteDto.builder()
-                    .id(clienteUpdate.getId())
-                    .nombre(clienteUpdate.getNombre())
-                    .apellido(clienteUpdate.getApellido())
-                    .registro(clienteUpdate.getRegistro())
-                    .correo(clienteUpdate.getCorreo())
-                    .build();
-            return new ResponseEntity<>(MensajeResponse.builder()
-                    .mensaje("Guardado correctamente")
-                    .object(clienteDto)
-                    .build(), HttpStatus.CREATED);
+            if(clienteService.existsById(id)) {
+                clienteDto.setId(id);
+                clienteUpdate = clienteService.save(clienteDto);
+                clienteDto = ClienteDto.builder()
+                        .id(clienteUpdate.getId())
+                        .nombre(clienteUpdate.getNombre())
+                        .apellido(clienteUpdate.getApellido())
+                        .registro(clienteUpdate.getRegistro())
+                        .correo(clienteUpdate.getCorreo())
+                        .build();
+                return new ResponseEntity<>(MensajeResponse.builder()
+                        .mensaje("Guardado correctamente")
+                        .object(clienteDto)
+                        .build(), HttpStatus.CREATED);
+            } else{
+                return new ResponseEntity<>(MensajeResponse.builder()
+                        .mensaje("El registro que intenta actualizar no se encuentra registrado")
+                        .object(null)
+                        .build(), HttpStatus.NOT_FOUND);
+            }
         } catch (DataAccessException ex) {
             return new ResponseEntity<>(MensajeResponse.builder()
                     .mensaje(ex.getMessage())
