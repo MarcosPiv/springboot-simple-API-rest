@@ -1,6 +1,7 @@
 package com.MarcosPiv.api_rest_basica.service.impl;
 
 import com.MarcosPiv.api_rest_basica.model.dao.ClienteDao;
+import com.MarcosPiv.api_rest_basica.model.dto.ClienteDto;
 import com.MarcosPiv.api_rest_basica.model.entity.Cliente;
 import com.MarcosPiv.api_rest_basica.service.ICliente;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,14 @@ public class ClienteImpl implements ICliente {
     //Una transacción es una secuencia de operaciones que se tratan como una única unidad de trabajo,
     //lo que significa que todas las operaciones dentro de la transacción deben completarse con éxito; de lo contrario, ninguna operación debe tener efecto en la BD
     @Override
-    public Cliente save(Cliente cliente) {
+    public Cliente save(ClienteDto clienteDto) {
+        Cliente cliente = Cliente.builder()
+                .id(clienteDto.getId())
+                .nombre(clienteDto.getNombre())
+                .apellido(clienteDto.getApellido())
+                .correo(clienteDto.getCorreo())
+                .registro(clienteDto.getRegistro())
+                .build();
         return clienteDao.save(cliente);
     }
 

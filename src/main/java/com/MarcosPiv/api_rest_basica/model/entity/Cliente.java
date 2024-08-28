@@ -11,6 +11,7 @@ import java.util.Date;
 @AllArgsConstructor //me genera el constructor
 @NoArgsConstructor //constructor vacio
 @ToString
+@Builder
 
 @Entity //definimos la clase como una entidad
 @Table(name = "clientes") //definimos a donde hace referencia la clase
@@ -18,7 +19,7 @@ public class Cliente implements Serializable {
     @Id //el id de la tabla es el atributo id
     @Column(name = "id_cliente") //hace referencia a id_cliente
     @GeneratedValue(strategy = GenerationType.IDENTITY) //esto es para definir valor del id será generado automáticamente por la BD
-    private int id;
+    private Integer id;
     @Column(name = "nombre")
     private String nombre;
     @Column(name = "apellido")
